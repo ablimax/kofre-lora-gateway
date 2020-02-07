@@ -27,7 +27,7 @@ def index(value, unidade, dispositivo):
     json_body[0]["measurement"] = unidade
 
 
-    client = InfluxDBClient(broker, 8086, 'root', 'root', 'lora')          #setting my DB
+    client = InfluxDBClient('10.11.108.10', 8086, 'root', 'root', 'lora')          #setting my DB
     client.create_database('lora')                                              #name of my DB
     client.write_points(json_body)                                              #popuate my Db
 
