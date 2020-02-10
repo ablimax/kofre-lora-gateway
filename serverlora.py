@@ -10,7 +10,7 @@ with open('home/abraao/Documents/config.json') as json_data_file:
 
 broker = configDATA["mqtt"]["broker"]
 port = configDATA["mqtt"]["port"]
-topico = configDATA["mqtt"]["topico"]
+topic = configDATA["mqtt"]["topico"]
 ipdb = configDATA["influxdb"]["ipdb"]
 portdb = configDATA["influxdb"]["port"]
 namedb = configDATA["influxdb"]["namedb"]
