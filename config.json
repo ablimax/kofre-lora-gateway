@@ -1,0 +1,12 @@
+{
+    "mqtt": {
+        "broker":"10.11.108.10",
+        "port":1883,
+        "topico":"itg200"
+    },
+    "influxdb": {
+        "ipdb": "10.11.108.10",
+        "port":8086,
+        "namedb": "loradb"
+    }
+}
