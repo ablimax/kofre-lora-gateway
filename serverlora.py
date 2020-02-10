@@ -5,11 +5,15 @@ from influxdb import InfluxDBClient
 from pathlib import Path
 
 
-with open('home/abraao/Documents/config1.json') as json_data_file:
+with open('home/abraao/Documents/config.json') as json_data_file:
     configDATA = json.load(json_data_file)
 
 broker = configDATA["mqtt"]["broker"]
 port = configDATA["mqtt"]["port"]
+topico = configDATA["mqtt"]["topico"]
+ipdb = configDATA["influxdb"]["ipdb"]
+portdb = configDATA["influxdb"]["port"]
+namedb = configDATA["influxdb"]["namedb"]
 
 
 #define index db
@@ -33,8 +37,8 @@ def index(value, unidade, dispositivo):
     json_body[0]["measurement"] = unidade
 
 
-    client = InfluxDBClient('10.11.108.10', 8086, 'root', 'root', 'lora')          #setting my DB
-    client.create_database('lora')                                              #name of my DB
+    client = InfluxDBClient(ipdb, portdb, 'root', 'root', namedb)               #setting my DB
+    client.create_database(namedb)                                              #name of my DB
     client.write_points(json_body)                                              #popuate my Db
 
     
