@@ -4,9 +4,10 @@ import json
 from influxdb import InfluxDBClient
 from pathlib import Path
 
-
+print("Loading config.json")
 with open('./config.json') as json_data_file:
     configDATA = json.load(json_data_file)
+
 
 broker = configDATA["mqtt"]["broker"]
 port = configDATA["mqtt"]["port"]
@@ -14,6 +15,13 @@ topic = configDATA["mqtt"]["topic"]
 ipdb = configDATA["influxdb"]["ipdb"]
 portdb = configDATA["influxdb"]["port"]
 namedb = configDATA["influxdb"]["namedb"]
+
+print("MQTT Broker: ",broker)
+print("MQTT port: ",port)
+print("MQTT Topic: ",topic)
+print("Influx DB: ",ipdb)
+print("Influx Db Port: ",portdb)
+print("Influx Db Database: ",namedb)
 
 
 #define index db
@@ -134,7 +142,7 @@ print("Connecting to broker ",broker)
 client1.connect(broker) #connect
 client1.loop_start() #start loop to process received messages
 print("Subscribing ")
-client1.subscribe("itg200") #subscribe
+client1.subscribe(topic) #subscribe
 
 
 time.sleep(2)
