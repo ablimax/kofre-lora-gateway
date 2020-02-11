@@ -1,10 +1,33 @@
 import time
 import paho.mqtt.client as paho
 import json
+import socket
 from influxdb import InfluxDBClient
+from pathlib import Path
 
-broker="10.11.108.10"
-port=1883
+
+print("Loading config.json")
+with open('./config.json') as json_data_file:
+    configDATA = json.load(json_data_file)
+
+
+broker = configDATA["mqtt"]["broker"]
+port = configDATA["mqtt"]["port"]
+topic = configDATA["mqtt"]["topic"]
+ipdb = configDATA["influxdb"]["ipdb"]
+portdb = configDATA["influxdb"]["port"]
+namedb = configDATA["influxdb"]["namedb"]
+
+print("MQTT Broker: ",broker)
+print("MQTT port: ",port)
+print("MQTT Topic: ",topic)
+print("Influx DB: ",ipdb)
+print("Influx Db Port: ",portdb)
+print("Influx Db Database: ",namedb)
+
+
+clientid = "client_" + socket.gethostname()
+print("MQTT client id: ", clientid)
 
 #define index db
 def index(value, unidade, dispositivo):
@@ -26,9 +49,8 @@ def index(value, unidade, dispositivo):
     json_body[0]["tags"]["host"] = dispositivo
     json_body[0]["measurement"] = unidade
 
-
-    client = InfluxDBClient('10.11.108.10', 8086, 'root', 'root', 'lora')          #setting my DB
-    client.create_database('lora')                                              #name of my DB
+    client = InfluxDBClient(ipdb, portdb, 'root', 'root', namedb)               #setting my DB
+    client.create_database(namedb)                                              #name of my DB
     client.write_points(json_body)                                              #popuate my Db
 
     
@@ -37,16 +59,16 @@ def index(value, unidade, dispositivo):
 def on_message(client, userdata, message):
     time.sleep(1)
     msg = str(message.payload.decode("utf-8"))
-    topicoG = ('F8033201CC5F')
-    topicoE = ('4B686F6D70113574') 
+    topicG = ('F8033201CC5F')
+    topicE = ('4B686F6D70113574') 
     print("received message =",msg)
     print()
     jsonData = json.loads(msg)
 
     
-    if jsonData[0]["bn"] == topicoG:     #gateway
+    if jsonData[0]["bn"] == topicG:     #gateway
         flag = 1
-    if jsonData[0]["bn"] == topicoE:     #end-point
+    if jsonData[0]["bn"] == topicE:     #end-point
         flag = 0
     
 
@@ -86,6 +108,7 @@ def on_message(client, userdata, message):
             
     if flag == 1:       #é um gateway
 
+
         if jsonData[1]["n"] == ('C1'or'C2'):      #é uma interrupção(porta)
 
             value = jsonData[1]["vb"]                       
@@ -108,7 +131,7 @@ def on_message(client, userdata, message):
             index(value, unidade, disp)            
 
 
-client1= paho.Client("client-001") #create client object client1.on_publish = $
+client1= paho.Client(clientid) #create client object client1.on_publish = $
 #assign function to callback 
 client1.connect(broker,port) 
 #establish connection 
@@ -124,7 +147,7 @@ print("Connecting to broker ",broker)
 client1.connect(broker) #connect
 client1.loop_start() #start loop to process received messages
 print("Subscribing ")
-client1.subscribe("itg200") #subscribe
+client1.subscribe(topic) #subscribe
 
 
 time.sleep(2)
