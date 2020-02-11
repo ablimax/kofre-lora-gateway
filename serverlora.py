@@ -1,8 +1,10 @@
 import time
 import paho.mqtt.client as paho
 import json
+import socket
 from influxdb import InfluxDBClient
 from pathlib import Path
+
 
 print("Loading config.json")
 with open('./config.json') as json_data_file:
@@ -23,6 +25,9 @@ print("Influx DB: ",ipdb)
 print("Influx Db Port: ",portdb)
 print("Influx Db Database: ",namedb)
 
+
+clientid = "client_" + socket.gethostname()
+print("MQTT client id: ", clientid)
 
 #define index db
 def index(value, unidade, dispositivo):
@@ -126,7 +131,7 @@ def on_message(client, userdata, message):
             index(value, unidade, disp)            
 
 
-client1= paho.Client("client-001") #create client object client1.on_publish = $
+client1= paho.Client(clientid) #create client object client1.on_publish = $
 #assign function to callback 
 client1.connect(broker,port) 
 #establish connection 
