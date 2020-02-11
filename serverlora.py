@@ -49,7 +49,6 @@ def index(value, unidade, dispositivo):
     json_body[0]["tags"]["host"] = dispositivo
     json_body[0]["measurement"] = unidade
 
-
     client = InfluxDBClient(ipdb, portdb, 'root', 'root', namedb)               #setting my DB
     client.create_database(namedb)                                              #name of my DB
     client.write_points(json_body)                                              #popuate my Db
@@ -108,6 +107,7 @@ def on_message(client, userdata, message):
                 
             
     if flag == 1:       #é um gateway
+
 
         if jsonData[1]["n"] == ('C1'or'C2'):      #é uma interrupção(porta)
 
