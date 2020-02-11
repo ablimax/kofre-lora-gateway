@@ -5,12 +5,12 @@ from influxdb import InfluxDBClient
 from pathlib import Path
 
 
-with open('home/abraao/Documents/config.json') as json_data_file:
+with open('./config.json') as json_data_file:
     configDATA = json.load(json_data_file)
 
 broker = configDATA["mqtt"]["broker"]
 port = configDATA["mqtt"]["port"]
-topic = configDATA["mqtt"]["topico"]
+topic = configDATA["mqtt"]["topic"]
 ipdb = configDATA["influxdb"]["ipdb"]
 portdb = configDATA["influxdb"]["port"]
 namedb = configDATA["influxdb"]["namedb"]
@@ -47,16 +47,16 @@ def index(value, unidade, dispositivo):
 def on_message(client, userdata, message):
     time.sleep(1)
     msg = str(message.payload.decode("utf-8"))
-    topicoG = ('F8033201CC5F')
-    topicoE = ('4B686F6D70113574') 
+    topicG = ('F8033201CC5F')
+    topicE = ('4B686F6D70113574') 
     print("received message =",msg)
     print()
     jsonData = json.loads(msg)
 
     
-    if jsonData[0]["bn"] == topicoG:     #gateway
+    if jsonData[0]["bn"] == topicG:     #gateway
         flag = 1
-    if jsonData[0]["bn"] == topicoE:     #end-point
+    if jsonData[0]["bn"] == topicE:     #end-point
         flag = 0
     
 
