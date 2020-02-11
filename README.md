@@ -6,4 +6,13 @@ This application populates the MQTT Data to a influxdb database using HTTP. Next
 
 ## How to use
 
-## Docker
+### Running directly using Python 3
+
+### With Docker
+
+### With Docker Compose
+
+## Change log
+
+### V1.0
+First offcial working version using JSON config file.
